@@ -17,7 +17,7 @@ public class Cliente extends Thread{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("LLega un cliente");
+        System.out.println("LLega " + this.nombre);
         this.atendido= true;
 
     }
