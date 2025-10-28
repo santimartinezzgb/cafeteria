@@ -71,6 +71,7 @@ public class HelloController {
         }).start();
     }
 
+
     private void appendText(String texto) {
         javafx.application.Platform.runLater(() -> txtSalida.appendText(texto));
     }
