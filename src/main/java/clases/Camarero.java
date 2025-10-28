@@ -11,7 +11,6 @@ public class Camarero implements Runnable{
 
 
     public void run() {
-        System.out.println(this.nombre + " está preparando el café...");
         try {
             Thread.sleep(preparacion);
         } catch (InterruptedException e) {

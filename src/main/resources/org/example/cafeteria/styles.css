@@ -5,3 +5,17 @@
 #textoDelPanel {
     -fx-font-size: 20px;
 }
+
+#btnIniciar {
+    -fx-background-color: green;
+    -fx-background-raidus: 10px;
+    -fx-border-radius: 10px;
+    -fx-text-fill: white;
+}
+
+#btnSalir {
+    -fx-background-color: red;
+    -fx-background-raidus: 10px;
+    -fx-border-radius: 10px;
+    -fx-text-fill: white;
+}

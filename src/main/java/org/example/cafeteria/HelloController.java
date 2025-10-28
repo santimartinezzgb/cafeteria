@@ -2,7 +2,9 @@ package org.example.cafeteria;
 
 import clases.Camarero;
 import clases.Cliente;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
 import java.util.ArrayList;
@@ -12,11 +14,23 @@ public class HelloController {
 
     @FXML
     private TextArea textoDelPanel;
+    @FXML
+    private Button btnIniciar;
+    @FXML
+    private Button btnSalir;
+
+    @FXML
+    public void salirDelPrograma(){
+        Platform.exit();
+    }
 
     @FXML
     public void iniciarTurno() {
+        btnIniciar.setVisible(false);
+        btnSalir.setVisible(true);
         textoDelPanel.clear();
-        textoDelPanel.appendText("Abriendo cafetería...\n\n");
+
+        textoDelPanel.setText("Abriendo cafetería...\n\n");
 
         new Thread(() -> {
             try {
@@ -52,15 +66,13 @@ public class HelloController {
                     int preparacion = camarero.preparacion/1000;
 
                     if (cliente.tiempo_de_espera < camarero.preparacion) {
-                        appendText(cliente.nombre +" se fue enfadado. "+
-                                "MÁX espera: " + tiempo_de_espera + " s / "
-                                + camarero.nombre + " tardó " + preparacion + " s\n"+
-                                "____________________________________________________\n");
+                        appendText(cliente.nombre +" se fue enfadado.\n"+
+                                "MÁX espera: " + tiempo_de_espera + " s | "
+                                + camarero.nombre + " tardó " + preparacion + " s\n\n");
                     } else {
-                        appendText(cliente.nombre + " se lleva su café. "+
-                                "MÁX espera: " + tiempo_de_espera + " s / "
-                                + camarero.nombre + " tardó " + preparacion + " s\n"+
-                                "____________________________________________________\n");
+                        appendText(cliente.nombre + " se lleva su café.\n"+
+                                "MÁX espera: " + tiempo_de_espera + " s | "
+                                + camarero.nombre + " tardó " + preparacion + " s\n\n");
                     }
                 }
 

@@ -10,7 +10,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
-        stage.setTitle("Simulación Cafetería");
+        stage.setTitle("Cafetería las palmeras");
         stage.setScene(scene);
         stage.show();
     }

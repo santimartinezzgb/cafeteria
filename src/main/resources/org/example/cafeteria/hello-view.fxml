@@ -10,7 +10,8 @@
           fx:id="panel" spacing="10" alignment="CENTER" prefWidth="600" prefHeight="300">
         <Label text="Cafetería Las Palmeras" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
 
-        <Button text="Iniciar turno" fx:id="btnIniciar" onAction="#iniciarTurno"/>
+    <Button text="Iniciar turno" fx:id="btnIniciar" onAction="#iniciarTurno"/>
+    <Button text="Salir" fx:id="btnSalir" onAction="#salirDelPrograma" visible="false"/>
 
         <TextArea fx:id="textoDelPanel" prefWidth="900" maxWidth="900"
                   prefHeight="550" maxHeight="550"/>
