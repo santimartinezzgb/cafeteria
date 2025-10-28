@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.example.cafeteria.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.cafeteria.HelloController"
+            prefWidth="600" prefHeight="400">
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+    <VBox spacing="10" alignment="CENTER" prefWidth="600" prefHeight="400">
+        <Label text="Cafetería Las Palmeras" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <Button text="Iniciar turno" fx:id="btnIniciar" onAction="#iniciarTurno"/>
+
+        <TextArea fx:id="txtSalida" prefWidth="550" prefHeight="300"
+                  wrapText="true" editable="false"/>
+    </VBox>
+</AnchorPane>
