@@ -11,12 +11,12 @@ import java.util.Arrays;
 public class HelloController {
 
     @FXML
-    private TextArea txtSalida;
+    private TextArea textoDelPanel;
 
     @FXML
     public void iniciarTurno() {
-        txtSalida.clear();
-        txtSalida.appendText("Abriendo cafetería...\n\n");
+        textoDelPanel.clear();
+        textoDelPanel.appendText("Abriendo cafetería...\n\n");
 
         new Thread(() -> {
             try {
@@ -28,8 +28,8 @@ public class HelloController {
 
                 ArrayList<Cliente> CLIENTES = new ArrayList<>(Arrays.asList(cli1, cli2, cli3, cli4, cli5));
 
-                Camarero camarero1 = new Camarero("CAMARERO 1");
-                Camarero camarero2 = new Camarero("CAMARERO 2");
+                Camarero camarero1 = new Camarero("CAMARERO_AZUL");
+                Camarero camarero2 = new Camarero("CAMARERO_ROJO");
 
                 ArrayList<Camarero> CAMAREROS = new ArrayList<>(Arrays.asList(camarero1, camarero2));
 
@@ -46,19 +46,20 @@ public class HelloController {
                     servicio.start();
                     servicio.join();
 
-                    appendText(camarero.nombre + " está preparando el café de "+ cliente.nombre + ". Tiempo de preparación: " + camarero.preparacion/1000 + " s\n");
+                    appendText(camarero.nombre + " tiene listo el café de "+ cliente.nombre + "\n");
 
                     int tiempo_de_espera = cliente.tiempo_de_espera/1000;
+                    int preparacion = camarero.preparacion/1000;
 
-                    if (cliente.tiempo_de_espera > camarero.preparacion) {
+                    if (cliente.tiempo_de_espera < camarero.preparacion) {
                         appendText(cliente.nombre +" se fue enfadado. "+
-                                "Su máximo de espera es " + tiempo_de_espera + " s y "
-                                + camarero.nombre + " tardó " + tiempo_de_espera + " s\n"+
+                                "MÁX espera: " + tiempo_de_espera + " s / "
+                                + camarero.nombre + " tardó " + preparacion + " s\n"+
                                 "____________________________________________________\n");
                     } else {
                         appendText(cliente.nombre + " se lleva su café. "+
-                                "Su máximo de espera es " + tiempo_de_espera + " s y "
-                                + camarero.nombre + " tardó " + tiempo_de_espera + " s\n"+
+                                "MÁX espera: " + tiempo_de_espera + " s / "
+                                + camarero.nombre + " tardó " + preparacion + " s\n"+
                                 "____________________________________________________\n");
                     }
                 }
@@ -73,6 +74,6 @@ public class HelloController {
 
 
     private void appendText(String texto) {
-        javafx.application.Platform.runLater(() -> txtSalida.appendText(texto));
+        javafx.application.Platform.runLater(() -> textoDelPanel.appendText(texto));
     }
 }
