@@ -1,6 +1,6 @@
-# ☕ Simulación de Cafetería Multihilo
+# Simulación de Cafetería Multihilo
 
-## 📋 Descripción
+## Descripción
 
 Este proyecto en **Java** simula el funcionamiento de una **cafetería** donde varios clientes son atendidos por camareros utilizando **hilos (threads)**.  
 Cada cliente tiene un tiempo máximo de espera, y los camareros tardan un tiempo variable en preparar los cafés.  
@@ -8,7 +8,7 @@ Si la preparación excede el límite de espera del cliente, este se va enfadado;
 
 ---
 
-## ⚙️ Funcionamiento
+## Funcionamiento
 
 1. Se crean varios **clientes** (`Cliente`) y **camareros** (`Camarero`).
 2. Cada cliente llega, espera su turno y es atendido por un camarero (según el índice del bucle).
