@@ -1,21 +1,61 @@
 
 #panel {
-    -fx-background-color: #ABEEFF;
+    -fx-background-image: url("fondo-cafeteria.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+
 }
 #textoDelPanel {
-    -fx-font-size: 20px;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
 }
 
+#ContadorPalabra{
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-background: white;
+    -fx-background-color: white;
+    -fx-alignment: center;
+    -fx-padding: 15px;
+        -fx-border-radius: 10px;
+        -fx-background-radius: 10px
+}
+#contadorClientesSatisfechos{
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-padding: 0;
+        -fx-border-radius: 10px;
+        -fx-background-radius: 10px
+}
 #btnIniciar {
     -fx-background-color: green;
-    -fx-background-raidus: 10px;
-    -fx-border-radius: 10px;
     -fx-text-fill: white;
+
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 40;
+    -fx-max-width: 200px;
+    -fx-max-height: 40;
+
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px
 }
 
 #btnSalir {
     -fx-background-color: red;
-    -fx-background-raidus: 10px;
-    -fx-border-radius: 10px;
     -fx-text-fill: white;
+
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 40;
+    -fx-max-width: 150px;
+    -fx-max-height: 40;
+
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px
 }

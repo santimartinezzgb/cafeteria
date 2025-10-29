@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.scene.text.Text?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.cafeteria.HelloController"
+      stylesheets="@styles.css"
+      fx:id="panel" spacing="20" alignment="CENTER" prefWidth="600" prefHeight="300">
+
+        <HBox spacing="80" alignment="CENTER">
+            <Label fx:id="ContadorPalabra" text="Clientes satisfechos:"/>
+            <TextArea fx:id="contadorClientesSatisfechos"
+                      text="0" prefWidth="10" maxWidth="10"
+                      prefHeight="10" maxHeight="10" editable="false"/>
+            <Button text="Iniciar turno" fx:id="btnIniciar" onAction="#iniciarTurno"/>
+            <Button text="Salir" fx:id="btnSalir" onAction="#salirDelPrograma"/>
+        </HBox>
+
+
+        <TextArea fx:id="textoDelPanel" prefWidth="900" maxWidth="900"
+                  prefHeight="600" maxHeight="600" editable="false"/>
+    </VBox>
+
