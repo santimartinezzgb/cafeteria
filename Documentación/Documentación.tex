@@ -1,0 +1,195 @@
+\documentclass[14pt]{extarticle}
+\usepackage{graphicx}
+\usepackage{titling}
+\renewcommand{\contentsname}{Índice}
+\usepackage{float}
+
+\pretitle{\begin{center}\Huge\bfseries}
+\posttitle{\end{center}}
+\title{Documentación Cafetería con Threads}
+\author{por Santi Martínez}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    \newpage
+    \tableofcontents
+
+    \newpage
+
+    \section{Introducción}
+    Este es un programa en JavaFX en el que la principal tarea es jugar con los hilos (Threads).
+    \\\\Ela programa permite iniciar un turno de atención de clientes, mostrar en tiempo real el estado de cada cliente, actualizar un contador de clientes satisfechos y manejar la interacción con los botones \texttt{Iniciar turno} y \texttt{Salir}.  
+    \\\\Los hilos se utilizan para simular la llegada de los clientes y la preparación de los cafés por los camareros, garantizando que la interfaz siga respondiendo mientras se ejecutan estas tareas en segundo plano.
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[scale=1.5]{images/cafeteria.jpg}
+        \end{figure}
+
+
+    \newpage    
+    \section{Stack}
+    \subsection{Lenguaje de programación}
+        El lenguaje en el que está desarrollado este programa es Java, en concreto la versión 21.0.8. El SDK es el openjdk-25.
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[scale=0.25]{images/java.jpg}
+        \end{figure}
+
+    \subsection{Framework}
+        El framework utilizado por el programa es \texttt{JavaFX}, el cual permite crear interfaces atractivas en Java. \\\\Facilita el manejo de eventos y da una vista moderna al programa, y además integra la posibilidad de utilizar CSS, lo que genera una UI más agradable.
+
+    \subsection{IDE}
+        Elegí \texttt{IntelliJ IDEA} para hacer el programa con hilos en Java porque permite ver el comportamiento de múltiples threads en tiempo real, como es el caso del programa, en el que se verá más adelante como se va ejecutando en directo.
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[scale=0.2]{images/intellij.jpg}
+        \end{figure}
+
+
+
+    \newpage    
+    \section{Casos de uso}
+
+        \begin{enumerate}
+            \item \texttt{Abrir la cafetería}.  
+            El usuario inicia el turno con el botón \texttt{Iniciar turno}. La aplicación muestra que la cafetería está abierta y lista para recibir clientes.
+            
+            \item \texttt{Atender clientes}.  
+            Cada cliente llega y espera su café. Los camareros preparan el café de forma concurrente usando hilos.
+            
+            \item \texttt{Actualizar estado de los clientes}.  
+            La interfaz muestra si un cliente se va enfadado o si recibe su café. Se actualiza el contador de \texttt{clientes satisfechos} en tiempo real.
+            
+            \item \texttt{Salir de la aplicación}.  
+            El usuario puede cerrar la aplicación con el botón \texttt{Salir}, que usa por detrás \texttt{Platform.exit()}.
+            
+            \item \texttt{Registrar tiempos de espera y servicio}.  
+            La app compara el \texttt{tiempo de espera del cliente} con el \texttt{tiempo de preparación del camarero} y muestra mensajes depende del resultado.
+        \end{enumerate}
+
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[scale=0.35]{images/casos-de-uso.jpg}
+        \end{figure}
+
+
+    \newpage    
+    \section{Requisitos}
+    Los requisitos son las condiciones que el sistema debe cumplir para satisfacer a los usuarios y funcionar correctamente.
+
+    \subsection{Requisitos funcionales}
+    Definen lo que el sistema debe de hacer.
+    Se centran en funciones, servicios y comportamientos del programa.
+    \\\\En este caso, ejemplos de casos de uso funcionales serían:
+    \begin{itemize}
+        \item Iniciar servicio
+        \item Atender a clientes
+        \item Mostrar si el cliente se fue con el caféa tiempo o se fue enfadado
+        \item Contar y mostrar los clientes que se fueron satisfechos
+        \item Salir del programa en el momento que el usuario quiera
+    \end{itemize}
+
+    \subsection{Requisitos no funcionales}
+    Dicen como debe comportarse el sistema ante el programa. Se centra en varios matices, pero por gusto personal los fundamentales son seguridad, rendimiento y portabilidad.
+    \\\\En este caso, ejemplos de casos de uso no funcionales serían:
+    \begin{itemize}
+        \item La interfaz se actualiza en directo
+        \item La app es estable mientras se procesan clientes
+        \item Funciona enc ualquier plataforma que soporte Java y JavaFX
+    \end{itemize}
+
+
+    \newpage
+    \section{Backend}
+        \begin{itemize}
+            \item Clases principales
+            \item App y Launcher
+            \item Controlador
+        \end{itemize}
+
+    \subsection{Clases principales}
+        \begin{itemize}
+            \item \underline{Camarero}
+            \item \underline{Cliente}
+        \end{itemize}
+
+    \subsection{App y Launcher}
+        Sirven para ejecutar toda la App
+
+    \subsection{Controlador (Flujo del programa)}
+        Es la clase de Java donde se produce todo el backend.
+        A continuación se muestra un breve flujo del mismo:
+        \begin{enumerate}
+            \item Se crean los objetos botones y textarea
+            \item se crea un método para salir del programa
+            \item Se crea el método principal, en el cual se realiza resto del programa.
+            \item Se crea un nuevo hilo, el cual es una función invocada inmediatamente, para que en el momento en que aparece se ejecuta.
+            \item Dentro del hilo, se crean 5 clientes, se les añade a una lista CLIENTES. Se crean también 2 camareros y se les añade a la lista CAMAREROS.
+            \item Bucle en el que en cada pasada se inicia el hilo de un cliente y se crea un nuevo Hilo que ejecuta a un camarero, los cuales se saltean entre pasadas entre uno y otro.
+            \item Antes de finalizar el bucle, se toman los tiempos de espera de camarero y cliente, se comparan, y según resultado se determina un final u otro.
+            \item Para terminal el flujo se añade al TextArea "Servicio finalizado"
+        \end{enumerate}
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[scale=0.25]{images/flujo-programa.jpg}
+        \end{figure}
+
+    \newpage
+    \section{Frontend}
+        \begin{itemize}
+            \item Vistas del programa
+            \item main.fxml
+            \item styles.css
+        \end{itemize}
+
+    \subsection{Vistas del programa}
+
+    Esta es la \texttt{vista principal}, la que se observa al iniciar el programa.  
+    Tiene dos posibilidades: Iniciar el programa o salir de este.  
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.35]{images/imagen.png}
+        \caption{Vista principal del programa}
+    \end{figure}
+
+    Al clicar en el botón de \texttt{Iniciar programa}, ese botón se oculta y aparece la frase que da apertura a la cafetería.  
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.3]{images/imagen2.png}
+        \caption{Apertura de la cafetería}
+    \end{figure}
+
+    Una vez el programa concluye, aparece el texto final \texttt{Servicio finalizado}.  
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.42]{images/imagen3.png}
+        \caption{Servicio finalizado}
+    \end{figure}
+
+    Durante el transcurso del programa, cada vez que un cliente se va satisfecho con el servicio del camarero (tiempos en positivo: espera mayor que preparación), \texttt{se suma uno al contador}.  
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.6]{images/imagen4.png}
+        \caption{Contador de clientes satisfechos}
+    \end{figure}
+
+
+    \newpage
+    \subsection{main.fxml}
+    Es la parte visible de la app. La conforma una etiqueta VBox, en la cual su interio alberga:
+        \begin{itemize}
+            \item \texttt{Contador} (Clientes satisfechos): Cada vez que un cliente recibe su café a tiempo, este suma uno.
+            \item \texttt{Button} (Iniciar turno): Sirve para iniciar el método que se encuentra en el controlador, el cual ejecuta todo el funcionamiento de la app.
+            \item \texttt{Button} (Salir): Solo aparece cuando accionas el anterior, sirve para salir de la app.
+            \item \texttt{TextArea}: Donde se muestra todo el flujo del programa a tiempo real; Abrir cafetería, camareros preparando el café, cliente esperando, el resultado del servicio y el aviso de servicio finalizado.
+        \end{itemize}
+
+    \subsection{styles.css}
+        El archivo CSS cumple la función de \texttt{definir la apariencia visual de la interfaz de usuario (UI)}. En este caso, su contenido es relativamente breve, ya que el programa en cuestión no posee una gran cantidad de elementos o componentes visuales.\\\\A través de este archivo se establecen propiedades como los colores, los tamaños de fuente, los márgenes, los rellenos, la alineación del texto y otros aspectos relacionados con la presentación de los elementos. De esta manera, se logra que la interfaz mantenga una estética uniforme y facilite la lectura y la interacción del usuario con el sistema.
+
+\end{document}
