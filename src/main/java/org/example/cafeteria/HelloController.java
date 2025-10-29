@@ -34,7 +34,7 @@ public class HelloController {
         btnIniciar.setVisible(false);
         textoDelPanel.clear();
 
-        textoDelPanel.setText("Abriendo cafetería...\n\n");
+        textoDelPanel.setText("\uD83D\uDD5A Abriendo cafetería... \uD83D\uDD5A\n\n");
 
         new Thread(() -> {
             try {
@@ -58,33 +58,33 @@ public class HelloController {
                     cliente.start();
                     cliente.join();
 
-                    appendText("Llega " + cliente.nombre + ". Espera a que le preparen su café...\n");
+                    appendText("Llega " + cliente.nombre + ". Espera...\n");
 
                     Thread servicio = new Thread(camarero);
                     servicio.start();
                     servicio.join();
 
-                    appendText(camarero.nombre + " tiene listo el café de "+ cliente.nombre + "\n");
+                    //appendText(camarero.nombre + " tiene listo el café de "+ cliente.nombre + "\n");
 
                     int tiempo_de_espera = cliente.tiempo_de_espera/1000;
                     int preparacion = camarero.preparacion/1000;
 
                     if (cliente.tiempo_de_espera < camarero.preparacion) {
 
-                        appendText(cliente.nombre +" se fue enfadado.\n"+
-                                "MÁX espera: " + tiempo_de_espera + " s | "
-                                + camarero.nombre + " tardó " + preparacion + " s\n\n");
+                        appendText(cliente.nombre +" se fue \uD83D\uDE21\n"+
+                                "Espera: " + tiempo_de_espera + " s | "
+                                + "Preparación: " + preparacion + " s\n\n");
                     } else {
                         contadorClientesSatisfechos.clear();
                         contador += 1;
                         contadorClientesSatisfechos.appendText(String.valueOf(contador));
-                        appendText(cliente.nombre + " se lleva su café.\n"+
-                                "MÁX espera: " + tiempo_de_espera + " s | "
-                                + camarero.nombre + " tardó " + preparacion + " s\n\n");
+                        appendText(cliente.nombre + " se lleva el ☕\n"+
+                                "Espera: " + tiempo_de_espera + " s | "
+                                +"Preparación: " + preparacion + " s\n\n");
                     }
                 }
 
-                appendText("Servicio finalizado");
+                appendText("Servicio finalizado \uD83C\uDF89 \uD83C\uDF89");
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
