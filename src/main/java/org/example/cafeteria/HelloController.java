@@ -1,15 +1,16 @@
 package org.example.cafeteria;
 
+import clases.Barista;
+import clases.Buffer;
 import clases.Camarero;
 import clases.Cliente;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.IndexRange;
 import javafx.scene.control.TextArea;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class HelloController {
 
@@ -17,11 +18,6 @@ public class HelloController {
     private TextArea textoDelPanel;
     @FXML
     private Button btnIniciar;
-    @FXML
-    private Button btnSalir;
-    @FXML
-    private TextArea contadorClientesSatisfechos;
-    int contador = 0;
 
     @FXML
     public void salirDelPrograma(){
@@ -30,70 +26,41 @@ public class HelloController {
 
     @FXML
     public void iniciarTurno() {
-
         btnIniciar.setVisible(false);
         textoDelPanel.clear();
-
         textoDelPanel.setText("\uD83D\uDD5A Abriendo cafetería... \uD83D\uDD5A\n\n");
 
-        new Thread(() -> {
-            try {
-                Cliente cli1 = new Cliente("Joao");
-                Cliente cli2 = new Cliente("Marcos");
-                Cliente cli3 = new Cliente("Arda");
-                Cliente cli4 = new Cliente("Jude");
-                Cliente cli5 = new Cliente("Daniel");
-
-                ArrayList<Cliente> CLIENTES = new ArrayList<>(Arrays.asList(cli1, cli2, cli3, cli4, cli5));
-
-                Camarero camarero1 = new Camarero("CAMARERO_AZUL");
-                Camarero camarero2 = new Camarero("CAMARERO_ROJO");
-
-                ArrayList<Camarero> CAMAREROS = new ArrayList<>(Arrays.asList(camarero1, camarero2));
-
-                for (int i = 0; i < CLIENTES.size(); i++) {
-                    Cliente cliente = CLIENTES.get(i);
-                    Camarero camarero = CAMAREROS.get(i % CAMAREROS.size());
-
-                    cliente.start();
-                    cliente.join();
-
-                    appendText("Llega " + cliente.nombre + ". Espera...\n");
-
-                    Thread servicio = new Thread(camarero);
-                    servicio.start();
-                    servicio.join();
-
-                    //appendText(camarero.nombre + " tiene listo el café de "+ cliente.nombre + "\n");
-
-                    int tiempo_de_espera = cliente.tiempo_de_espera/1000;
-                    int preparacion = camarero.preparacion/1000;
-
-                    if (cliente.tiempo_de_espera < camarero.preparacion) {
-
-                        appendText(cliente.nombre +" se fue \uD83D\uDE21\n"+
-                                "Espera: " + tiempo_de_espera + " s | "
-                                + "Preparación: " + preparacion + " s\n\n");
-                    } else {
-                        contadorClientesSatisfechos.clear();
-                        contador += 1;
-                        contadorClientesSatisfechos.appendText(String.valueOf(contador));
-                        appendText(cliente.nombre + " se lleva el ☕\n"+
-                                "Espera: " + tiempo_de_espera + " s | "
-                                +"Preparación: " + preparacion + " s\n\n");
-                    }
-                }
-
-                appendText("Servicio finalizado \uD83C\uDF89 \uD83C\uDF89");
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        // Redirigir la salida estándar a la interfaz gráfica
+        PrintStream souts_de_hilos = new PrintStream(new OutputStream() {
+            // Escribir en el TextArea desde cualquier hilo
+            @Override
+            public void write(int b) {
+                Platform.runLater(() -> textoDelPanel.appendText(String.valueOf((char) b)));
             }
+        });
+        // setOut y setErr redirigen la salida estándar y de error
+        System.setOut(souts_de_hilos);
+        System.setErr(souts_de_hilos);
+
+
+        new Thread(() -> {
+            Buffer buffer = new Buffer();
+            Camarero camarero = new Camarero(buffer);
+            Barista barista = new Barista(buffer);
+
+            barista.start();
+            camarero.start();
+
+            try {
+                barista.join();
+                camarero.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            System.out.println("Cafetería cerrada");
         }).start();
     }
 
 
-    private void appendText(String texto) {
-        javafx.application.Platform.runLater(() -> textoDelPanel.appendText(texto));
-    }
 }
