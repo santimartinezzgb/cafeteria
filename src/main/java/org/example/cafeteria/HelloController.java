@@ -38,6 +38,7 @@ public class HelloController {
                 Platform.runLater(() -> textoDelPanel.appendText(String.valueOf((char) b)));
             }
         });
+
         // setOut y setErr redirigen la salida estándar y de error
         System.setOut(souts_de_hilos);
         System.setErr(souts_de_hilos);
