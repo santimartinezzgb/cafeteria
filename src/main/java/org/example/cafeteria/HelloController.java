@@ -26,6 +26,7 @@ public class HelloController {
 
     @FXML
     public void iniciarTurno() {
+
         btnIniciar.setVisible(false);
         textoDelPanel.clear();
         textoDelPanel.setText("COMIENZA EL TURNO\n\n");
