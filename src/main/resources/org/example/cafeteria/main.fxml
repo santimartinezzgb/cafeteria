@@ -8,15 +8,14 @@
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.cafeteria.HelloController"
       stylesheets="@styles.css"
-      fx:id="panel" spacing="20" alignment="CENTER" prefWidth="600" prefHeight="300">
+      fx:id="panel" spacing="20" alignment="CENTER">
 
-        <HBox spacing="80" alignment="CENTER">
-            <Button text="Iniciar turno" fx:id="btnIniciar" onAction="#iniciarTurno"/>
-            <Button text="Salir" fx:id="btnSalir" onAction="#salirDelPrograma"/>
-        </HBox>
+    <HBox spacing="40" alignment="CENTER">
+        <Button text="Iniciar turno" fx:id="btnIniciar" onAction="#iniciarTurno"/>
+        <Button text="Salir" fx:id="btnSalir" onAction="#salirDelPrograma"/>
+    </HBox>
 
-
-        <TextArea fx:id="textoDelPanel" prefWidth="900" maxWidth="900"
-                  prefHeight="600" maxHeight="600" editable="false"/>
-    </VBox>
+    <TextArea fx:id="textoDelPanel" prefWidth="450" maxWidth="450"
+              prefHeight="600" maxHeight="600" editable="false"/>
+</VBox>
 

@@ -2,7 +2,7 @@ package clases;
 
 public class Buffer {
     public int contador_de_cafes = 0;
-    private final int CAPACIDAD_MAXIMA = 5;
+    private final int CAPACIDAD_MAXIMA = 3;
     
 
     // PARA CAMARERO
@@ -18,7 +18,9 @@ public class Buffer {
         }
         contador_de_cafes--;
         notifyAll();
-        System.out.println("CAMARERO recoge café. CAFÉS EN MESA: ("+contador_de_cafes+"/"+ CAPACIDAD_MAXIMA +")");
+        System.out.println("\nCAMARERO recoge la taza.\nTAZAS EN MESA: ("+
+                contador_de_cafes+"/"+ CAPACIDAD_MAXIMA +
+                ")\n==============================");
     }
 
     // PARA EL BARISTA
@@ -35,7 +37,9 @@ public class Buffer {
 
         contador_de_cafes++;
         notifyAll();
-        System.out.println("BARISTA tiene listo el café. CAFÉS EN MESA: (" + contador_de_cafes + "/"+ CAPACIDAD_MAXIMA +")");
+        System.out.println("\nBARISTA deja la taza.\nTAZAS EN MESA: (" +
+                contador_de_cafes + "/"+ CAPACIDAD_MAXIMA +
+                ")\n==============================");
     }
 }
 

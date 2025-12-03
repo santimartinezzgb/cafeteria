@@ -28,7 +28,7 @@ public class HelloController {
     public void iniciarTurno() {
         btnIniciar.setVisible(false);
         textoDelPanel.clear();
-        textoDelPanel.setText("\uD83D\uDD5A Abriendo cafetería... \uD83D\uDD5A\n\n");
+        textoDelPanel.setText("COMIENZA EL TURNO\n\n");
 
         // Redirigir la salida estándar a la interfaz gráfica
         PrintStream souts_de_hilos = new PrintStream(new OutputStream() {
@@ -42,8 +42,8 @@ public class HelloController {
         System.setOut(souts_de_hilos);
         System.setErr(souts_de_hilos);
 
-
-        new Thread(() -> {
+        // Crear e iniciar el hilo del turno
+        Thread threadTurno = new Thread(() -> {
             Buffer buffer = new Buffer();
             Camarero camarero = new Camarero(buffer);
             Barista barista = new Barista(buffer);
@@ -58,8 +58,11 @@ public class HelloController {
                 Thread.currentThread().interrupt();
             }
 
-            System.out.println("Cafetería cerrada");
-        }).start();
+            System.out.println("TURNO TERMINADO");
+            Platform.runLater(() -> btnIniciar.setVisible(true));
+        });
+
+        threadTurno.start();
     }
 
 
