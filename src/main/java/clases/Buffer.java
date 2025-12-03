@@ -1,14 +1,13 @@
 package clases;
 
 public class Buffer {
-    public int contador_de_cafes = 0;
+    public int CONTADOR_CAFES = 0;
     private final int CAPACIDAD_MAXIMA = 3;
-    
 
     // PARA CAMARERO
     public synchronized void get() {
 
-        while (contador_de_cafes == 0) {
+        while (CONTADOR_CAFES == 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -16,17 +15,17 @@ public class Buffer {
                 return;
             }
         }
-        contador_de_cafes--;
+        CONTADOR_CAFES--;
         notifyAll();
-        System.out.println("\nCAMARERO recoge la taza.\nTAZAS EN MESA: ("+
-                contador_de_cafes+"/"+ CAPACIDAD_MAXIMA +
+        System.out.println("\nCAMARERO recoge la taza.\nTAZAS EN MESA: (" +
+                CONTADOR_CAFES + "/" + CAPACIDAD_MAXIMA +
                 ")\n==============================");
     }
 
     // PARA EL BARISTA
-    public synchronized void put (){
+    public synchronized void put() {
 
-        while(contador_de_cafes == CAPACIDAD_MAXIMA) {
+        while (CONTADOR_CAFES == CAPACIDAD_MAXIMA) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -35,12 +34,10 @@ public class Buffer {
             }
         }
 
-        contador_de_cafes++;
+        CONTADOR_CAFES++;
         notifyAll();
         System.out.println("\nBARISTA deja la taza.\nTAZAS EN MESA: (" +
-                contador_de_cafes + "/"+ CAPACIDAD_MAXIMA +
+                CONTADOR_CAFES + "/" + CAPACIDAD_MAXIMA +
                 ")\n==============================");
     }
 }
-
-

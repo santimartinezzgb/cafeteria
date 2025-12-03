@@ -3,6 +3,8 @@
 \usepackage{titling}
 \renewcommand{\contentsname}{Índice}
 \usepackage{float}
+\usepackage{tcolorbox}
+\usepackage[hidelinks]{hyperref}
 
 \pretitle{\begin{center}\Huge\bfseries}
 \posttitle{\end{center}}
@@ -18,9 +20,9 @@
         {\Large \textbf{Programación de Servicios y Procesos}\par}
         
         \vspace{2cm}
-        {\Huge \textbf{Cafetería con Threads}\par}
+        {\Huge \textbf{Modelo Productor-Consumidor}\par}
         \vspace{0.5cm}
-        {\large wait() y notify()\par}
+        {\large Cafetería\par}
         
         \vspace{2cm}
         \noindent\rule{10cm}{0.4pt}
@@ -30,7 +32,7 @@
         \vspace{0.3cm}
         {\large Santi Martínez\par}
         
-        \vspace{6cm}
+        \vspace{5cm}
         {\large \today}
         
     \end{titlepage}
@@ -55,9 +57,15 @@
 
         \vspace{0.3cm}
         En resumen, el barista produce cafés y los coloca en una mesa (buffer) con capacidad limitada. Si la mesa está llena, el barista espera hasta que un camarero recoja un café. Por otro lado, el camarero consume cafés de la mesa. Si no hay cafés disponibles, el camarero espera hasta que el barista prepare más.
-        
+
         \vspace{0.3cm}
-        Esta sincronización asegura que no haya condiciones de carrera y que los productores y consumidores operen de manera coordinada.
+        \begin{tcolorbox}
+            [colback=blue!5!white,colframe=blue!50!black,fonttitle=\bfseries]
+            Esta sincronización asegura que no haya condiciones de carrera y que los productores y consumidores operen de manera coordinada.
+        \end{tcolorbox}
+        
+
+ 
 
     \newpage    
     \section{Requisitos}
@@ -65,9 +73,11 @@
         \subsection{Requisitos funcionales}
             \begin{itemize}
                 \item Iniciar servicio
-                \item Atender a clientes
-                \item Mostrar si el cliente se fue con el caféa tiempo o se fue enfadado
-                \item Contar y mostrar los clientes que se fueron satisfechos
+                \item Barista prepara los cafés y los deja en la mesa
+                \item Camarero recoge los cafés de la mesa y los sirve a los clientes
+                \item Mostrar en la interfaz las acciones del barista y el camarero en tiempo real
+                \item Finalizar el servicio automáticamente cuando se hayan procesado los cafés determinados en la variable de configuración de cada clase
+                \item Posibilidad de iniciar de nuevo el servicio sin reiniciar la aplicación
                 \item Salir del programa en el momento que el usuario quiera
             \end{itemize}
 
@@ -78,50 +88,174 @@
                 \item Funciona en cualquier plataforma que soporte Java y JavaFX
             \end{itemize}
 
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=0.4\textwidth]{images/requisitos.jpg}
-        \end{figure}
-
     \newpage
     \section{Modelo}
 
     \subsection{Introducción del modelo}
     
         El modelo implementa el patrón productor-consumidor utilizando hilos en Java. En este caso, el barista actúa como productor que prepara cafés y los coloca en una mesa (buffer) con capacidad limitada. El camarero es el consumidor que recoge los cafés de la mesa para servirlos a los clientes.
+        \vspace{0.5cm}        
 
-        \subsubsection{Buffer.java}
+        En el software, se utilizan los métodos \textbf{wait()} y \textbf{notifyAll()} para gestionar la sincronización entre los hilos. Cuando el barista intenta dejar un café en la mesa y esta está llena, el hilo del barista se pone en espera utilizando \textbf{wait()}. De manera similar, si el camarero intenta recoger un café y la mesa está vacía, su hilo también se pone en espera.
 
-            Clase compartida entre productores y consumidores.
+        \vspace{0.5cm}
+
+        \begin{tcolorbox}
+            [colback=blue!5!white,colframe=blue!50!black,fonttitle=\bfseries,title=Ejemplo]
+
+            Este patrón, se utiliza por ejemplo cuando se realiza una suscripción a una web, newsletter, etc, donde dicho servicio nos manda un email. Al indicar el email y así como se clica en “suscribirte” el servidor, responde “Gracias por la subscripción” pero, a los dos minutos llega el email indicando dicha suscripción. Esto es porque se utiliza el patrón productor consumidor.
+
+            \vspace{0.5cm}
+            A la vista del usuario, al hacer click se ha registrado su email y ha llegado el mensaje a su email. Pero en realidad, el servidor ha puesto el email en una cola de mensajes y otro proceso ha ido leyendo esa cola y enviando los emails.
+        \end{tcolorbox}
+
+
+
+    \newpage
+    \subsection{Buffer.java}
+
+        Como su propio nombre indica, la clase que hace de buffer, compartida entre productores y consumidores. Alberga los siguientes atributos y métodos:
+        \begin{enumerate}
+            \item \textbf{CONTADOR\_CAFES}: Número actual de cafés en la mesa.
+            \item \textbf{CAPACIDAD\_MAXIMA}: Constante que define la capacidad máxima de la mesa (3 cafés).
+            \item \textbf{put()}: Método sincronizado para que el Barista deje un café en la mesa. Si la está llena de cafés (3/3), el barista espera hasta que un camarero recoja un café.
+            \item \textbf{get()}: Método sincronizado para que el Camarero recoja un café de la mesa. Si no hay cafés, el camarero espera hasta que el barista prepare más cafés y los deje en la mesa.
+        \end{enumerate}
+
+        \vspace{0.3cm}
+
+            Estos métodos son fundamentales para la sincronización entre hilos.
             \begin{itemize}
-                \item \texttt{contador\_de\_cafes}: Número actual de cafés en la mesa (capacidad máxima: 3)
-                \item \texttt{put()}: Método sincronizado para que el Barista deje un café. Si la mesa está llena, espera con \texttt{wait()}
-                \item \texttt{get()}: Método sincronizado para que el Camarero recoja un café. Si no hay cafés, espera con \texttt{wait()}
-                \item Usa \texttt{notifyAll()} para despertar hilos en espera cuando cambia el estado del buffer
+                \item \textbf{wait()}: Hace que el hilo actual espere hasta que otro hilo lo notifique, normalmente con una condición. Libera el monitor del objeto, permitiendo que otros hilos accedan a él mientras está en espera.
+                \item \textbf{notifyAll()}: Despierta a todos los hilos que están esperando en el monitor del objeto. Esto permite que los hilos puedan reanudar su ejecución cuando las condiciones cambien.
             \end{itemize}
 
-        \subsubsection{Barista.java (Productor)}
 
-            Thread que representa al barista que prepara los cafés.
-            \begin{itemize}
-                \item Extiende \texttt{Thread} para ejecutarse de forma concurrente
-                \item Realiza 35 iteraciones preparando cafés
-                \item Llama a \texttt{buffer.put()} para dejar cada café en la mesa
-                \item Simula tiempo de preparación aleatorio (0-500ms) con \texttt{Thread.sleep()}
-                \item Imprime mensajes de estado en consola
-            \end{itemize}
+        \vspace{0.3cm}
+        A nivel conceptual, el buffer gestiona la comunicación y sincronización entre el productor y el consumidor, generando un flujo controlado de producción y una iteración segura de datos entre los hilos.
 
-        \subsubsection{Camarero.java (Consumidor)}
+    \newpage
+    \subsection{Productor}
 
-            Thread que representa al camarero que sirve los cafés a los clientes.
-            \begin{itemize}
-                \item Extiende \texttt{Thread} para ejecutarse de forma concurrente
-                \item Realiza 35 iteraciones sirviendo cafés
-                \item Llama a \texttt{buffer.get()} para recoger cada café de la mesa
-                \item Simula tiempo de servicio aleatorio (0-500ms) con \texttt{Thread.sleep()}
-                \item Imprime mensajes de estado en consola
-            \end{itemize}
+        En el modelo productor-consumidor, el productor es el hilo que genera datos y los coloca en el buffer para que el consumidor los procese. En este caso, el productor es el barista que prepara cafés y los deja en la mesa (buffer). En el caso de este proyecto, tiene las siguientes responsabilidades:
+
+        \begin{itemize}
+            \item Extiende \textbf{Thread} para ejecutarse de forma concurrente
+            \item Realiza las iteraciones que se estimen en la variable de configuración en cada clase.
+            \item Llama un método en el buffer \textbf{buffer.put()} para dejar café en la mesa
+            \item Simula tiempo de preparación (aleatorio) con \textbf{Thread.sleep()}
+            \item Imprime mensajes de estado en consola
+        \end{itemize}
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.3\textwidth]{images/barista.jpg}
+        \end{figure}
+
+        Haciendo abstración del contexto del café, el productor sigue el patrón clásico de producción en un sistema concurrente, asegurando que los datos se generen y almacenen de manera segura y eficiente para su posterior consumo por el consumidor.
 
 
+        
 
+    \newpage
+    \subsection{Consumidor}
+
+        La clase consumidor representa el hilo que consume los datos producidos por el productor. En este caso, el consumidor es el camarero que recoge los cafés de la mesa (buffer) para servirlos a los clientes. Sus responsabilidades son las siguientes:
+        \begin{itemize}
+            \item Extiende \textbf{Thread} para ejecutarse de forma concurrente
+            \item Realiza las iteraciones que se estimen en la variable de configuración en cada clase.
+            \item Llama un método en el buffer \textbf{buffer.get()} para recoger café de la mesa
+            \item Simula tiempo de servicio (aleatorio) con \textbf{Thread.sleep()}
+            \item Imprime mensajes de estado en consola
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.3\textwidth]{images/camarero.jpg}
+        \end{figure}
+        Al igual que el productor, el consumidor sigue el patrón clásico de consumo en un sistema concurrente, asegurando que los datos se procesen de manera segura y eficiente una vez que estén disponibles en el buffer.
+
+    \newpage
+    \section{Interfaz Gráfica}
+
+        \subsection{Pantalla inicial}
+
+            La interfaz gráfica está desarrollada con JavaFX y permite al usuario interactuar con el programa de manera sencilla. A continuación, se describen los componentes principales de la interfaz:
+
+            \vspace{0.5cm}
+            % == Pantalla de inicio ==
+            \begin{minipage}{.5\textwidth}
+
+                \textbf{Botón "Iniciar turno"}: Al hacer clic en este botón, se inician los hilos del barista y el camarero. Este se desactiva mientras el servicio está en curso para evitar múltiples inicios. Al finalizar el turno, se reactiva para permitir iniciar un nuevo servicio.
+
+                \vspace{0.3cm}
+                \textbf{Botón "Salir"}: Permite cerrar la aplicación de manera segura. Al hacer clic en este botón, se detienen todos los procesos y se cierra la ventana de la aplicación.
+
+
+            \end{minipage}
+            \hspace{1cm}
+            \begin{minipage}{.4\textwidth}
+                \includegraphics[scale=0.3]{images/inicio-programa.png}
+            \end{minipage}
+
+            \vspace{1cm}
+            La interfaz se actualiza dinámicamente para reflejar el estado actual del sistema, proporcionando una experiencia interactiva al usuario.
+
+        \newpage
+        \subsection{Pantalla en ejecución}
+
+            \vspace{0.5cm}
+
+            % == Pantalla de ejecución ==
+            \begin{minipage}{.4\textwidth}
+                \includegraphics[scale=0.3]{images/ejecucion-programa.png}
+            \end{minipage}
+            \hspace{1cm}
+            \begin{minipage}{.5\textwidth}
+
+                \textbf{Botón "Iniciar turno"}: Desaparece o se desactiva mientras el servicio está en curso para evitar múltiples inicios. Al finalizar el turno, se reactiva para permitir iniciar un nuevo servicio.
+
+                \vspace{0.3cm}
+                \textbf{Botón "Salir"}: Sigue permitiendo cerrar la aplicación de manera segura en cualquier momento.
+
+            \end{minipage}
+
+            \vspace{1cm}
+            Durante la ejecución, la interfaz muestra en tiempo real las acciones del barista y el camarero, proporcionando una experiencia interactiva.
+
+            \vspace{0.3cm}
+            El programa \textbf{finaliza automáticamente} cuando se han procesado todos los cafés determinados en las variables de configuración de cada clase. Este final solo se produce cuando el camarero ha servido todos los cafés preparados por el barista.
+
+            \vspace{0.3cm}
+            \begin{tcolorbox}
+                [colback=blue!5!white,colframe=blue!50!black,fonttitle=\bfseries]
+                Cada hilo realiza un número determinado de iteraciones (preparar y servir cafés) y una vez que ambos hilos han completado sus tareas, el programa concluye su ejecución.
+            \end{tcolorbox}
+
+        \newpage
+        \subsection{Pantalla final}
+            % == Pantalla de programa terminado ==
+            \begin{minipage}{.5\textwidth}
+
+                \textbf{Botón "Iniciar turno"}: Reaparece o se reactiva para permitir iniciar un nuevo servicio si el usuario desea hacerlo.
+
+                \vspace{0.3cm}
+                \textbf{Botón "Salir"}: Misma funcionalidad que en las pantallas anteriores, permitiendo cerrar la aplicación de manera segura.
+
+            \end{minipage}
+            \hspace{1cm}
+            \begin{minipage}{.4\textwidth}
+                \includegraphics[scale=0.3]{images/fin-programa.png}
+            \end{minipage}
+
+            \vspace{1cm}
+            Al finalizar el turno, la interfaz muestra un mensaje indicando que el servicio ha concluido. El usuario tiene la opción de iniciar un nuevo turno o salir de la aplicación.
+            
+
+    \newpage
+    \section{Bibliografía}
+
+        \begin{itemize}
+            \item Uso del PrintStream: \href{https://stackoverflow.com/questions/49582205/how-to-use-printstream}{stackoverflow.com}
+        \end{itemize}
+                    
 \end{document}
