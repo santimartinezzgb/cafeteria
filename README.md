@@ -1,26 +1,28 @@
-# Simulación de Cafetería Multihilo
+
+# Simulación de Cafetería con Patrón Productor-Consumidor
 
 ## Descripción
-
-Este proyecto en **Java** simula el funcionamiento de una **cafetería** donde varios clientes son atendidos por camareros utilizando **hilos (threads)**.  
-Cada cliente tiene un tiempo máximo de espera, y los camareros tardan un tiempo variable en preparar los cafés.  
-Si la preparación excede el límite de espera del cliente, este se va enfadado; de lo contrario, se lleva su café satisfecho.
+Este proyecto en **Java** simula el funcionamiento de una **cafetería** utilizando el **patrón Productor-Consumidor** con **hilos (threads)**.  
+Los **baristas** actúan como productores preparando cafés, los **camareros** como consumidores sirviéndolos a los clientes, y un **buffer compartido** coordina la comunicación entre ambos roles.  
 
 ---
 
 ## Funcionamiento
 
-1. Se crean varios **clientes** (`Cliente`) y **camareros** (`Camarero`).
-2. Cada cliente llega, espera su turno y es atendido por un camarero (según el índice del bucle).
-3. Los tiempos de espera y preparación se comparan para determinar el resultado.
-4. Todo el proceso se muestra mediante la función `appendText()` en la interfaz.
+1. **Baristas (Productores)**: Preparan cafés y los colocan en el buffer compartido cuando hay espacio disponible.
+2. **Buffer**: Estructura de datos sincronizada (cola limitada) que almacena temporalmente los cafés preparados.
+3. **Camareros (Consumidores)**: Retiran cafés del buffer y los entregan a los clientes que esperan.
+5. Todo el proceso se visualiza en tiempo real mediante `appendText()` en la interfaz gráfica.
 
 ---
 
-## Tecnologías Utilizadas
+## Arquitectura del Sistema
 
-1. Java 8+
-2. JavaFX (para interfaz y appendText)
-3. Programación concurrente (Threads)
+### Componentes principales:
+- **Clase `Barista`**: Hilo productor que genera cafés continuamente
+- **Clase `Camarero`**: Hilo consumidor que retira cafés del buffer y los sirve
+- **Clase `Buffer`**: Estructura sincronizada (usando `BlockingQueue` o monitores con `wait()`/`notify()`)
+- **Sincronización**: Evita condiciones de carrera y garantiza el orden correcto de operaciones
 
 ---
+
