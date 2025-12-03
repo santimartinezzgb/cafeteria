@@ -12,7 +12,6 @@ Los **baristas** actúan como productores preparando cafés, los **camareros** c
 1. **Baristas (Productores)**: Preparan cafés y los colocan en el buffer compartido cuando hay espacio disponible.
 2. **Buffer**: Estructura de datos sincronizada (cola limitada) que almacena temporalmente los cafés preparados.
 3. **Camareros (Consumidores)**: Retiran cafés del buffer y los entregan a los clientes que esperan.
-5. Todo el proceso se visualiza en tiempo real mediante `appendText()` en la interfaz gráfica.
 
 ---
 
